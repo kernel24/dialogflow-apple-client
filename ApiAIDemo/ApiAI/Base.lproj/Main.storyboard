@@ -142,7 +142,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Voice Request" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DBK-Ve-15s">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="VoiceButton Request" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DBK-Ve-15s">
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -153,6 +153,26 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="whA-9i-g7E" kind="push" id="ho0-VT-HAE"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="d5f-aq-doW" style="IBUITableViewCellStyleDefault" id="juP-40-h0a">
+                                        <rect key="frame" x="0.0" y="132" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="juP-40-h0a" id="zWM-Yc-eIf">
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Voice Request" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="d5f-aq-doW">
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="cNu-VK-Hfh" kind="push" id="TFN-6L-TqP"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -277,10 +297,10 @@
             </objects>
             <point key="canvasLocation" x="981" y="1106"/>
         </scene>
-        <!--Voice Request View Controller-->
+        <!--Voice Request Button View Controller-->
         <scene sceneID="CeC-tS-KUC">
             <objects>
-                <viewController id="whA-9i-g7E" customClass="VoiceRequestViewController" sceneMemberID="viewController">
+                <viewController id="whA-9i-g7E" customClass="VoiceRequestButtonViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fzx-U6-mfc"/>
                         <viewControllerLayoutGuide type="bottom" id="bG7-f8-9B7"/>
@@ -293,6 +313,25 @@
                     <navigationItem key="navigationItem" id="HYY-sa-XYS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t0G-fS-dv4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="359" y="1390"/>
+        </scene>
+        <!--Voice Request View Controller-->
+        <scene sceneID="fxv-wZ-T9Y">
+            <objects>
+                <viewController id="cNu-VK-Hfh" customClass="VoiceRequestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="sHJ-VM-3qh"/>
+                        <viewControllerLayoutGuide type="bottom" id="k2X-WV-EYk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="B3j-zr-xvd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.66666668650000005" green="0.66666668650000005" blue="0.66666668650000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="zgj-Ky-RGV"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gID-iT-nYC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="359" y="1390"/>
         </scene>

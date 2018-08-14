@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0299F11107D463DF66322558 /* Pods_ApiAIDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB8D665B5DCBC5066038865 /* Pods_ApiAIDemo.framework */; };
-		48B25A282120A1EE00AB83BD /* VoiceRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B25A272120A1EE00AB83BD /* VoiceRequestViewController.m */; };
+		48B260622122F56800AB83BD /* VoiceRequestButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B260602122F56800AB83BD /* VoiceRequestButtonViewController.m */; };
+		48B260662122F65200AB83BD /* VoiceRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B260642122F65100AB83BD /* VoiceRequestViewController.m */; };
 		5806708A1A7642FD00A2B54C /* ResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 580670891A7642FD00A2B54C /* ResultViewController.m */; };
 		5806708D1A76437E00A2B54C /* ResultNavigarionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5806708C1A76437E00A2B54C /* ResultNavigarionController.m */; };
 		580670911A76455D00A2B54C /* TextRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 580670901A76455D00A2B54C /* TextRequestViewController.m */; };
@@ -27,8 +28,10 @@
 /* Begin PBXFileReference section */
 		08AB2E96DD06EEC78C3C64C7 /* Pods-ApiAIDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ApiAIDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ApiAIDemo/Pods-ApiAIDemo.release.xcconfig"; sourceTree = "<group>"; };
 		1E91BA334AB48C5CAEA543C0 /* Pods-ApiAIDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ApiAIDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ApiAIDemo/Pods-ApiAIDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		48B25A262120A1EE00AB83BD /* VoiceRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoiceRequestViewController.h; sourceTree = "<group>"; };
-		48B25A272120A1EE00AB83BD /* VoiceRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoiceRequestViewController.m; sourceTree = "<group>"; };
+		48B260602122F56800AB83BD /* VoiceRequestButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoiceRequestButtonViewController.m; sourceTree = "<group>"; };
+		48B260642122F65100AB83BD /* VoiceRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoiceRequestViewController.m; sourceTree = "<group>"; };
+		48B260652122F65100AB83BD /* VoiceRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoiceRequestViewController.h; sourceTree = "<group>"; };
+		48B260672122FC2600AB83BD /* VoiceRequestButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoiceRequestButtonViewController.h; sourceTree = "<group>"; };
 		580670881A7642FD00A2B54C /* ResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultViewController.h; sourceTree = "<group>"; };
 		580670891A7642FD00A2B54C /* ResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultViewController.m; sourceTree = "<group>"; };
 		5806708B1A76437E00A2B54C /* ResultNavigarionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultNavigarionController.h; sourceTree = "<group>"; };
@@ -77,11 +80,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		48B25A252120A1EE00AB83BD /* VoiceRequestViewController */ = {
+		48B2605F2122F56800AB83BD /* VoiceRequestButtonViewController */ = {
 			isa = PBXGroup;
 			children = (
-				48B25A262120A1EE00AB83BD /* VoiceRequestViewController.h */,
-				48B25A272120A1EE00AB83BD /* VoiceRequestViewController.m */,
+				48B260602122F56800AB83BD /* VoiceRequestButtonViewController.m */,
+				48B260672122FC2600AB83BD /* VoiceRequestButtonViewController.h */,
+			);
+			path = VoiceRequestButtonViewController;
+			sourceTree = "<group>";
+		};
+		48B260632122F65100AB83BD /* VoiceRequestViewController */ = {
+			isa = PBXGroup;
+			children = (
+				48B260642122F65100AB83BD /* VoiceRequestViewController.m */,
+				48B260652122F65100AB83BD /* VoiceRequestViewController.h */,
 			);
 			path = VoiceRequestViewController;
 			sourceTree = "<group>";
@@ -151,7 +163,8 @@
 		58C2A86919BEE2EB00632C2F /* ApiAI */ = {
 			isa = PBXGroup;
 			children = (
-				48B25A252120A1EE00AB83BD /* VoiceRequestViewController */,
+				48B260632122F65100AB83BD /* VoiceRequestViewController */,
+				48B2605F2122F56800AB83BD /* VoiceRequestButtonViewController */,
 				588D23B61AFB499D008289F1 /* MappedResponseViewController */,
 				5806708E1A76454E00A2B54C /* TextRequestViewController */,
 				580670871A7642EE00A2B54C /* ResultViewController */,
@@ -364,10 +377,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				588D23B91AFB49BE008289F1 /* MappedResponseViewController.m in Sources */,
+				48B260622122F56800AB83BD /* VoiceRequestButtonViewController.m in Sources */,
 				5806708D1A76437E00A2B54C /* ResultNavigarionController.m in Sources */,
 				5806708A1A7642FD00A2B54C /* ResultViewController.m in Sources */,
-				48B25A282120A1EE00AB83BD /* VoiceRequestViewController.m in Sources */,
 				58C2A87F19BEE2EB00632C2F /* main.m in Sources */,
+				48B260662122F65200AB83BD /* VoiceRequestViewController.m in Sources */,
 				580670911A76455D00A2B54C /* TextRequestViewController.m in Sources */,
 				58C2A87A19BEE2EB00632C2F /* AppDelegate.m in Sources */,
 			);
