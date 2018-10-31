@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #import "AIVoiceRequestButton.h"
 #import "AIVoiceLevelView.h"
 #import "AIVoiceContainerView.h"
@@ -24,8 +24,14 @@
 #import "AIVoiceRequest.h"
 
 #import <CoreGraphics/CoreGraphics.h>
+#import <Speech/Speech.h>
 
-@interface AIVoiceRequestButton()
+@interface AIVoiceRequestButton()<SFSpeechRecognizerDelegate, AVSpeechSynthesizerDelegate> {
+    SFSpeechRecognizer *speechRecognizer;
+    SFSpeechAudioBufferRecognitionRequest *recognitionRequest;
+    SFSpeechRecognitionTask *recognitionTask;
+    AVAudioEngine *audioEngine;
+}
 
 @property(nonatomic, weak) IBOutlet UIButton *button;
 
@@ -56,7 +62,6 @@
 {
     if (self.isProcessing) {
         if (self.isListening) {
-            [self.request commitVoice];
         } else {
             [self cancel];
         }
@@ -187,7 +192,7 @@
     
     CGContextClipToMask(context, bounds, [img CGImage]);
     CGContextFillRect(context, bounds);
-
+    
     UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -279,6 +284,29 @@
     
     [self setNeedsLayout];
     [self layoutIfNeeded];
+    
+    speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    
+    // Set speech recognizer delegate
+    speechRecognizer.delegate = self;
+    [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
+        switch (status) {
+            case SFSpeechRecognizerAuthorizationStatusAuthorized:
+                NSLog(@"Authorized");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusDenied:
+                NSLog(@"Denied");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusNotDetermined:
+                NSLog(@"Not Determined");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusRestricted:
+                NSLog(@"Restricted");
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
@@ -338,16 +366,8 @@
         }];
         
         [request setCompletionBlockSuccess:^(AIRequest *request, id response) {
-            if (selfWeak.successCallback) {
-                selfWeak.successCallback(response);
-            }
-            
             [self restoreStateAnimated];
         } failure:^(AIRequest *request, NSError *error) {
-            if (selfWeak.failureCallback) {
-                selfWeak.failureCallback(error);
-            }
-            
             [self restoreStateAnimated];
         }];
         
@@ -356,7 +376,101 @@
         [[ApiAI sharedApiAI] enqueue:request];
         
         [ellipseView setRadius:1.f animated:YES];
+        if (audioEngine.isRunning) {
+            [audioEngine stop];
+            [recognitionRequest endAudio];
+        } else {
+            [self startListening];
+        }
     }
+}
+
+- (void)startListening {
+    // Initialize the AVAudioEngine
+    audioEngine = [[AVAudioEngine alloc] init];
+    
+    // Make sure there's not a recognition task already running
+    if (recognitionTask) {
+        [recognitionTask cancel];
+        recognitionTask = nil;
+    }
+    
+    // Starts an AVAudio Session
+    NSError *error;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord  error:&error];
+    [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+    
+    [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    
+    // Starts a recognition process, in the block it logs the input or stops the audio
+    // process if there's an error.
+    recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+    AVAudioInputNode *inputNode = audioEngine.inputNode;
+    recognitionRequest.shouldReportPartialResults = YES;
+    
+    __weak typeof(self) selfWeak = self;
+    __weak AVAudioEngine *weakAVAudioEngine = audioEngine;
+    __weak SFSpeechAudioBufferRecognitionRequest *weakRecognitionRequest = recognitionRequest;
+    
+    recognitionTask = [speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+        BOOL isFinal = NO;
+        if (result) {
+            // Whatever you say in the microphone after pressing the button should be being logged
+            // in the console.
+            NSLog(@"RESULT:%@",result.bestTranscription.formattedString);
+            isFinal = !result.isFinal;
+        }
+        if (error) {
+            [weakAVAudioEngine stop];
+            [inputNode removeTapOnBus:0];
+        }
+        
+        
+        [weakAVAudioEngine stop];
+        [weakRecognitionRequest endAudio];
+        
+        if (!isFinal) {
+            
+            NSLog(@"isFinal:%@",result.bestTranscription.formattedString);
+            ApiAI *apiai = [ApiAI sharedApiAI];
+            AITextRequest *request = [apiai textRequest];
+            request.query = @[result.bestTranscription.formattedString?:@""];
+            [request setCompletionBlockSuccess:^(AIRequest *request, id response) {
+                if (selfWeak.successCallback) {
+                    selfWeak.successCallback(response);
+                    
+                    NSString *_responseSpeech = [[[response objectForKey:@"result"] objectForKey:@"fulfillment"] objectForKey:@"speech"];
+                    
+                    AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+                    synthesizer.delegate = self;
+                    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:_responseSpeech];
+                    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-US"];
+                    [synthesizer speakUtterance:utterance];
+                }
+                
+                [selfWeak restoreStateAnimated];
+            } failure:^(AIRequest *request, NSError *error) {
+                if (selfWeak.failureCallback) {
+                    selfWeak.failureCallback(error);
+                }
+                
+                [selfWeak restoreStateAnimated];
+            }];
+            [apiai enqueue:request];
+        }
+    }];
+    
+    // Sets the recording format
+    AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
+    [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+        [weakRecognitionRequest appendAudioPCMBuffer:buffer];
+    }];
+    
+    // Starts the audio engine, i.e. it starts listening.
+    [audioEngine prepare];
+    [audioEngine startAndReturnError:&error];
+    NSLog(@"Say Something, I'm listening");
 }
 
 - (void)changeButtonStateToSending {

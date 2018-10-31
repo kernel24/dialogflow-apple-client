@@ -2,6 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSMicrophoneUsageDescription</key>  <string>This app uses your microphone to record what you say, so watch what you say!</string>
+    
+    <key>NSSpeechRecognitionUsageDescription</key>  <string>This app uses Speech recognition to transform your spoken words into text and then analyze the, so watch what you say!.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
